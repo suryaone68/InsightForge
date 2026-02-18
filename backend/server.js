@@ -10,7 +10,9 @@ import { connect, saveBrief, getRecent, getDbStatus } from './src/database.js';
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, './frontend')));
 
