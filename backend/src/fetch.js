@@ -20,7 +20,6 @@ async function fetchSingle(url) {
       maxRedirects: 5,
     });
 
-    // Content type check
     const contentType = response.headers['content-type'] || '';
     if (!contentType.includes('text/html') && !contentType.includes('text/plain')) {
       throw new Error(`Invalid content type: ${contentType}`);
@@ -44,7 +43,6 @@ async function fetchSingle(url) {
       throw new Error('Page content too short');
     }
 
-    // Clean content — remove any leftover HTML tags
     content = content.replace(/<[^>]*>/g, '').trim();
 
     const snippet = $('meta[name="description"]').attr('content')
