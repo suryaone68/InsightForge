@@ -1,4 +1,4 @@
-const API = 'https://insightforge-a53q.onrender.com';
+const API = 'https://insightforge-a53q.onrender.com/api';
 
 // ─── Page Navigation ───────────────────────────────────
 function showPage(name) {
