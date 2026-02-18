@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsightForge</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <div class="nav-brand">⚡ InsightForge</div>
+    <div class="nav-links">
+      <a href="#" class="active" onclick="showPage('home')">Home</a>
+      <a href="#" onclick="showPage('history')">History</a>
+      <a href="#" onclick="showPage('status')">Status</a>
+    </div>
+  </nav>
+
+  <!-- HOME PAGE -->
+  <div id="page-home" class="page active">
+    <div class="container">
+      <div class="hero">
+        <h1>⚡ InsightForge</h1>
+        <p>AI-Powered Research Brief Generator</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <span>1</span>
+          <p>Paste 5-10 article links</p>
+        </div>
+        <div class="step">
+          <span>2</span>
+          <p>AI fetches & analyzes content</p>
+        </div>
+        <div class="step">
+          <span>3</span>
+          <p>Get structured research brief</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <label>Paste your links (5-10, one per line)</label>
+        <textarea id="links" rows="10" placeholder="https://example.com/article1
+https://example.com/article2
+..."></textarea>
+        <button id="generateBtn" onclick="generate()">🚀 Generate Research Brief</button>
+      </div>
+
+      <div id="loading" class="hidden">
+        <div class="spinner"></div>
+        <p>Fetching articles & generating brief... (20-40 seconds)</p>
+      </div>
+
+      <div id="error" class="hidden error-box"></div>
+
+      <div id="result" class="hidden"></div>
+    </div>
+  </div>
+
+  <!-- HISTORY PAGE -->
+  <div id="page-history" class="page hidden">
+    <div class="container">
+      <h2>📚 Last 5 Research Briefs</h2>
+      <div id="history-list"></div>
+    </div>
+  </div>
+
+  <!-- STATUS PAGE -->
+  <div id="page-status" class="page hidden">
+    <div class="container">
+      <h2>🔧 System Status</h2>
+      <div id="status-content"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
