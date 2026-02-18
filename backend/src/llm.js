@@ -71,8 +71,21 @@ export async function generateBrief(articles) {
     });
 
     const rawText = completion.choices[0].message.content.trim();
+
+    // Check karo HTML toh nahi aaya
+    if (rawText.startsWith('<')) {
+      throw new Error('LLM returned invalid response. Please try again.');
+    }
+
     const cleaned = rawText.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(cleaned);
+
+    let parsed;
+    try {
+      parsed = JSON.parse(cleaned);
+    } catch {
+      console.error('❌ Raw response:', rawText.substring(0, 300));
+      throw new Error('LLM returned invalid JSON. Please try again.');
+    }
 
     if (!parsed.summary || !parsed.keyPoints || !parsed.whatToVerify) {
       throw new Error('LLM response missing required fields');
