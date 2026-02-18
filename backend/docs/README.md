@@ -1,7 +1,8 @@
 # ⚡ InsightForge
 
 AI-Powered Research Brief Generator
-
+## Live Demo
+https://insightforge-a53q.onrender.com
 ## What it does
 Paste 5-10 article links and get a structured research brief with summary, key points with citations, conflicting claims, and a what-to-verify checklist.
 
