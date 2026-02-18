@@ -3,8 +3,8 @@ import * as cheerio from 'cheerio';
 import pLimit from 'p-limit';
 
 const limit = pLimit(3);
-const TIMEOUT_MS = 10000;
-const MAX_CONTENT = 5000;
+const TIMEOUT_MS = 15000;
+const MAX_CONTENT = 3000;
 const MIN_CONTENT = 200;
 
 async function fetchSingle(url) {
@@ -12,22 +12,27 @@ async function fetchSingle(url) {
     const response = await axios.get(url, {
       timeout: TIMEOUT_MS,
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Accept': 'text/html,application/xhtml+xml',
-        'Accept-Language': 'en-US,en;q=0.9',
-      }
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Connection': 'keep-alive',
+      },
+      maxRedirects: 5,
     });
 
-    const $ = cheerio.load(response.data);
+    // Content type check
+    const contentType = response.headers['content-type'] || '';
+    if (!contentType.includes('text/html') && !contentType.includes('text/plain')) {
+      throw new Error(`Invalid content type: ${contentType}`);
+    }
 
-    // Remove useless tags
+    const $ = cheerio.load(response.data);
     $('script, style, nav, footer, header, iframe, noscript').remove();
 
     const title = $('h1').first().text().trim()
       || $('title').text().trim()
       || 'Untitled';
 
-    // Try specific containers first
     let content = $('article').text()
       || $('main').text()
       || $('.content, .post, .article').text()
@@ -39,11 +44,13 @@ async function fetchSingle(url) {
       throw new Error('Page content too short');
     }
 
+    // Clean content — remove any leftover HTML tags
+    content = content.replace(/<[^>]*>/g, '').trim();
+
     const snippet = $('meta[name="description"]').attr('content')
       || content.substring(0, 200);
 
     console.log(`✅ Fetched: ${url} — ${content.length} chars`);
-
     return { url, title: title.substring(0, 200), content, snippet: snippet.trim() };
 
   } catch (error) {
